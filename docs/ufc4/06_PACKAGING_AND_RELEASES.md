@@ -32,4 +32,4 @@ python scripts/package_release.py
 * `tools/` (`gen_import_names.py`, `check_coverage.py`)
 * `README.md`, `LICENSE`, `run_game.bat`
 
-**Output:** `UFC4Native-ufc4-v0.1.0-windows-x86_64.zip` (~9.85 MB).
+**Output:** `UFC4Native-ufc4-v0.1.1-windows-x86_64.zip` (~9.85 MB).

@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
 """Package prebuilt UFC 4 Windows Native Port into a distributable release ZIP."""
+import argparse
 import os
 import zipfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-OUTPUT_ZIP = ROOT.parent / "UFC4Native-ufc4-v0.1.0-windows-x86_64.zip"
+
+DEFAULT_VERSION = "0.1.1"
 
 INCLUDE_FILES = [
     "UFC4.exe",
@@ -13,6 +15,12 @@ INCLUDE_FILES = [
     "run_game.bat",
     "README.md",
     "LICENSE",
+]
+
+OPTIONAL_FILES = [
+    "out/patches.bin",
+    "out/import_names.txt",
+    "out/content.bin",
 ]
 
 INCLUDE_DIRS = [
@@ -42,11 +50,20 @@ def should_exclude(path_str):
             return True
     return False
 
-def build_package():
-    print(f"Creating release archive: {OUTPUT_ZIP}")
-    with zipfile.ZipFile(OUTPUT_ZIP, "w", zipfile.ZIP_DEFLATED) as zf:
+def build_package(version=DEFAULT_VERSION):
+    output_zip = ROOT.parent / f"UFC4Native-ufc4-v{version}-windows-x86_64.zip"
+    print(f"Creating release archive: {output_zip}")
+    with zipfile.ZipFile(output_zip, "w", zipfile.ZIP_DEFLATED) as zf:
         # Add root files
         for f in INCLUDE_FILES:
+            src = ROOT / f
+            if src.exists():
+                arcname = f"UFC4Native/{f}"
+                print(f"  Adding file: {f}")
+                zf.write(src, arcname)
+
+        # Add optional precompiled files (e.g. patches.bin)
+        for f in OPTIONAL_FILES:
             src = ROOT / f
             if src.exists():
                 arcname = f"UFC4Native/{f}"
@@ -67,8 +84,12 @@ def build_package():
                     arcname = f"UFC4Native/{rel_to_root}"
                     zf.write(full_path, arcname)
 
-    size_mb = OUTPUT_ZIP.stat().st_size / (1024 * 1024)
-    print(f"Release package ready: {OUTPUT_ZIP} ({size_mb:.2f} MB)")
+    size_mb = output_zip.stat().st_size / (1024 * 1024)
+    print(f"Release package ready: {output_zip} ({size_mb:.2f} MB)")
+    return output_zip
 
 if __name__ == "__main__":
-    build_package()
+    parser = argparse.ArgumentParser(description="Package UFC 4 Windows Port Release")
+    parser.add_argument("--version", default=DEFAULT_VERSION, help=f"Release version (default: {DEFAULT_VERSION})")
+    args = parser.parse_args()
+    build_package(args.version)
