@@ -94,7 +94,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelectorAll('#res-segments .seg-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         currentSettings.resolution = btn.getAttribute('data-res');
-        chkNeoMode.checked = (currentSettings.resolution === '1080p' || currentSettings.resolution === '1440p' || currentSettings.resolution === '4k');
+        chkNeoMode.checked = (currentSettings.resolution === '1440p' || currentSettings.resolution === '4k');
         saveSettings();
       });
     });

@@ -260,7 +260,7 @@ class LauncherHandler(SimpleHTTPRequestHandler):
 
         # Graphics & Display
         res_mode = s.get("resolution", "1080p")
-        neo = s.get("neo_mode", False) or res_mode in ["1080p", "1440p", "4k"]
+        neo = s.get("neo_mode", False) or res_mode in ["1440p", "4k"]
         env["BB_NEO"] = "1" if neo else "0"
 
         if res_mode == "1440p":
@@ -301,6 +301,12 @@ class LauncherHandler(SimpleHTTPRequestHandler):
         env["BB_GARLIC_READS_VRAM"] = "1"
         env["BB_WRITE_TRACKING"] = "1"
         env["BB_UFC3_BIND_IDLE"] = "1"
+
+        # Career mode, Create-A-Fighter stability & long session garbage collection
+        env["BB_UI_BACKPRESSURE"] = "1"
+        env["BB_APPEARANCE_BACKPRESSURE"] = "1"
+        env["BB_DEPTH_AS_COLOR_REUSE"] = "1"
+        env["BB_GC_STALE_SECONDS"] = "60"
 
         if s.get("skip_movies", True):
             clip = os.path.join(ROOT_DIR, "share", "skip_movie.mkv")

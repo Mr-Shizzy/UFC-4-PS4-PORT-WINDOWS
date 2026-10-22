@@ -42,6 +42,12 @@ set BB_WRITE_TRACKING=1
 rem Keep worker thread bind idle active (backward-compatible runtime flag)
 set BB_UFC3_BIND_IDLE=1
 
+rem Career mode, Create-A-Fighter stability & memory garbage collection
+set BB_UI_BACKPRESSURE=1
+set BB_APPEARANCE_BACKPRESSURE=1
+set BB_DEPTH_AS_COLOR_REUSE=1
+set BB_GC_STALE_SECONDS=60
+
 rem Run game with real-time UTF-8 tee logging to logs\latest.log
 python -u scripts\run_with_log.py bin\sacredfire-game.exe out\boot-linked.bin --import-names out\import_names.txt --content-profile out\content.bin --patches out\patches.bin --app0 "e:\Downloads\UFC4\EA Sports UFC 4\CUSA14209-merged" --user user --timeout 0 %*
 
