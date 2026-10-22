@@ -43,3 +43,12 @@ build/
 /user/browser_profile/
 /user/launcher_port.txt
 /user/launcher_settings.json
+
+# Local machine, developer notes & AI agent rules (not part of public project)
+AGENTS.md
+CLAUDE.md
+GEMINI.md
+.agents/
+*GUIDE*.md
+*.local.md
+/docs/local/
