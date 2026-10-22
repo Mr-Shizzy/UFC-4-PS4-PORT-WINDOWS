@@ -108,8 +108,13 @@ static ABI int32_t addcont_mount(uint32_t service,const void *entitlement,char *
     require_initialized(); (void)service; (void)entitlement; (void)mount_point;
     return (int32_t)0x80D90005; /* SCE_APP_CONTENT_ERROR_NOT_FOUND */
 }
-static ABI int32_t addcont_unmount(const char *mount_point) { (void)mount_point; return 0; }
+static ABI int32_t pft_flag(uint32_t *flag) {
+    if (!flag) return PARAMETER;
+    *flag = 0; /* 0 = not a PlayFirst trial (full game) */
+    return 0;
+}
 uintptr_t runtime_content_resolve(const char *name) {
+    if (runtime_nid_equals(name,"xmhnAoxN3Wk#libSceAppContentPft") || runtime_nid_equals(name,"xmhnAoxN3Wk#libSceAppContent")) return (uintptr_t)pft_flag;
     if (runtime_nid_equals(name,"buYbeLOGWmA#libSceAppContent")) return (uintptr_t)temp_mount2;
     if (runtime_nid_equals(name,"a5N7lAG0y2Q#libSceAppContent")) return (uintptr_t)temp_format;
     if (runtime_nid_equals(name,"SaKib2Ug0yI#libSceAppContent")) return (uintptr_t)temp_space;

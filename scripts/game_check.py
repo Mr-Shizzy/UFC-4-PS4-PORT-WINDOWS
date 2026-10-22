@@ -21,17 +21,21 @@ from pathlib import Path
 # `modules` are the sce_module PRXs link_modules.py links natively; `patches` says whether
 # patches.py has a patch file for it.
 SUPPORTED = {
+    '83cfbe26711d6759556bba42a835e52450ec58117fe0a2fad33edfcd6c46981f': dict(
+        name='ufc4', title='CUSA14209', version='28.00', game='EA SPORTS UFC 4', update='CUSA14209-patch',
+        modules=('libc.prx', 'libSceFios2.prx'), patches=False),
     '46c2477702ae5d3fbff3a1911f10841aa150d20941d515ffb3edec75153f055b': dict(
         name='ufc3', title='CUSA06534', version='01.14', game='EA SPORTS UFC 3', update='CUSA06534-patch',
         modules=('libc.prx', 'libSceFios2.prx'), patches=False),
 }
 BY_TITLE = {p['title']: p for p in SUPPORTED.values()}
-# Images that are known NOT to be 1.14: the base game's executable (1.00). With a 1.14 param.sfo
+# Images that are known NOT to be the supported update: the base game's executable (1.00). With a supported param.sfo
 # these mean the update's eboot.bin was not copied in.
 OLD_IMAGES = {
+    'ea0ef73a0919fc54a309af2c62f92a3a45dfeb955f3c8f83df93fce43401f928': '01.00',
     '1dc99716a77f5411834d004d6becc3c829e382a244aa0dcbd63932a7eeee0bf1': '01.00',
 }
-# Other builds of the supported update (none known for UFC 3).
+# Other builds of the supported update.
 KNOWN_672 = set()
 # Plain-text files the game parses before main() (path -> lines a readable copy has). memory.cfg
 # declares the allocators and categories ("Sys" among them): read but unusable (blank, binary, a
@@ -41,9 +45,9 @@ CONFIG_FILES = {
     'samplegame/data/common/config/memory.cfg': ('AddAllocatorContainer.kettle', 'AddCategory'),
     'samplegame/data/common/config/videoheap.cfg': ('AddAllocator.kettle',),
 }
-SUPPORTED_TITLE = 'CUSA06534'
-SUPPORTED_VERSION = '01.14'
-SUPPORTED_IMAGE = '46c2477702ae5d3fbff3a1911f10841aa150d20941d515ffb3edec75153f055b'
+SUPPORTED_TITLE = 'CUSA14209'
+SUPPORTED_VERSION = '28.00'
+SUPPORTED_IMAGE = '83cfbe26711d6759556bba42a835e52450ec58117fe0a2fad33edfcd6c46981f'
 
 
 def image_sha256(game):

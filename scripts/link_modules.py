@@ -196,20 +196,80 @@ def link(game, out, module_names=DEFAULT_MODULES):
                           tls_relocations=tls_relocations, exports=count, sha256=m['sha256']))
         base = (base + modsize + 65535) & ~65535
 
+    NID_ALIASES = {
+        # pthread_rwlock -> scePthreadRwlock
+        'iGjsr1WAtI0#libkernel': 'Ox9i0c7L5w0#libkernel',
+        'sIlRvQqsN2Y#libkernel': 'mqdNorrB+gI#libkernel',
+        'EgmLo6EWgso#libkernel': '+L98PIbGttk#libkernel',
+    }
+
+    EMBEDDED_STUBS = {
+        # sceAppContentGetPftFlag(uint32_t *flag): if (rdi) *rdi = 0; return 0;
+        'xmhnAoxN3Wk#libSceAppContentPft': bytes.fromhex('4885ff7406c7070000000031c0c3'),
+        'xmhnAoxN3Wk#libSceAppContent': bytes.fromhex('4885ff7406c7070000000031c0c3'),
+        # sceKernelIsProspero(): return 0 (not PS5)
+        'mpxAdqW7dKY#libkernel_cpumode_platform': bytes.fromhex('31c0c3'),
+        # sceRemoteplay*
+        'k1SwgkMSOM8#libSceRemoteplay': bytes.fromhex('31c0c3'),
+        'mrNh78tBpmg#libSceRemoteplay': bytes.fromhex('31c0c3'),
+        'BOwybKVa3Do#libSceRemoteplay': bytes.fromhex('31c0c3'),
+        # sceGameLiveStreamingPermitLiveStreaming
+        'K0QxEbD7q+c#libSceGameLiveStreaming': bytes.fromhex('31c0c3'),
+        # sceAudioInGetSilentState, sceAudioInIsSharedDevice: if (rsi) *rsi = 0; return 0;
+        'BohEAQ7DlUE#libSceAudioIn': bytes.fromhex('4885f67406c7060000000031c0c3'),
+        '6QP1MzdFWhs#libSceAudioIn': bytes.fromhex('4885f67406c7060000000031c0c3'),
+        # sceNpWebApiAddHttpRequestHeader
+        'joRjtRXTFoc#libSceNpWebApi': bytes.fromhex('31c0c3'),
+        # sceDiscMap unknown
+        'fJgP+wqifno#libSceDiscMap': bytes.fromhex('31c0c3'),
+        # EAWebKit unknown
+        'qiOZEn26Kds#EAWebKit': bytes.fromhex('31c0c3'),
+    }
+
     # SacredFire: the loader and runtime see every import as NID#library (the eboot's own
     # library/module indices stay inside boot.bin and this linker). Plain names stay as they are.
     def canonical(name):
         identity = main['identity'](name)
         return f'{identity[0]}#{identity[1][0]}' if identity else name
     names = [canonical(name) for name in names]
+
+    # Generate embedded stubs for known functions that return 0 or clear out-pointers
+    stub_base = (base + 65535) & ~65535
+    stub_bytes = bytearray()
+    stub_addrs = {}
+    init_code = bytes.fromhex('31c0c3cccccccccc') # 8 bytes: xor eax, eax; ret; int3...
+    stub_bytes.extend(init_code)
+    for scoped, code in EMBEDDED_STUBS.items():
+        addr = stub_base + len(stub_bytes)
+        stub_addrs[scoped] = addr
+        stub_bytes.extend(code)
+        while len(stub_bytes) % 8 != 0:
+            stub_bytes.append(0xcc)  # int3 padding
+    if len(stub_bytes) > len(init_code):
+        stub_size = (len(stub_bytes) + 65535) & ~65535
+        stub_bytes.extend(bytes(stub_size - len(stub_bytes)))
+        if stub_base + stub_size > len(image):
+            image.extend(bytes(stub_base + stub_size - len(image)))
+        image[stub_base:stub_base + len(stub_bytes)] = stub_bytes
+        segments.append((stub_base, stub_size, 5))  # RX: PROT_READ | PROT_EXEC
+        table.append(dict(file='stubs.prx', base=stub_base, size=stub_size, init=stub_base,
+                          tls_address=0, tls_memsz=0, tls_filesz=0, tls_module=0,
+                          tls_relocations=0, exports=len(EMBEDDED_STUBS), sha256='0'*64))
+        base = stub_base + stub_size
+
     bindings, unresolved = [], []
     for identity, index in identities.items():
+        orig_name = names[index]
+        if orig_name in NID_ALIASES:
+            names[index] = NID_ALIASES[orig_name]
         found = exports.get(identity)
         if not found and identity and identity[1][0] == 'libSceLibcInternal':
             candidates = by_nid.get((identity[0], 'libc'), [])
             found = candidates[0] if len(candidates) == 1 else None
         if found:
             bindings.append((index, found[0], found[1]))
+        elif orig_name in stub_addrs:
+            bindings.append((index, stub_addrs[orig_name], 1))
         else:
             unresolved.append(names[index])
 

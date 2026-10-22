@@ -33,6 +33,17 @@ def split(folder: Path):
         if entry.is_dir() and entry != folder and entry.name.lower() in (name.lower() + s for s in SUFFIXES):
             if (entry / 'eboot.bin').is_file():
                 return folder, entry
+    # Detect release style names like _v1.00_ vs _v28.00_
+    if '_v1.00_' in name:
+        for entry in folder.parent.iterdir() if folder.parent.is_dir() else ():
+            if entry.is_dir() and entry != folder and '_v' in entry.name and '_v1.00_' not in entry.name:
+                if (entry / 'eboot.bin').is_file():
+                    return folder, entry
+    elif '_v' in name:
+        for entry in folder.parent.iterdir() if folder.parent.is_dir() else ():
+            if entry.is_dir() and entry != folder and '_v1.00_' in entry.name:
+                if (entry / 'eboot.bin').is_file():
+                    return entry, folder
     return folder, None
 
 
@@ -65,8 +76,8 @@ def place(source: Path, target: Path, stats):
     os.replace(temp, target)
 
 
-def merge(base: Path, update: Path) -> Path:
-    merged = base.with_name(base.name + '-merged')
+def merge(base: Path, update: Path, target_merged: Path = None) -> Path:
+    merged = target_merged or base.with_name(base.name + '-merged')
     sig = signature(base, update)
     marker = merged / MARKER
     try:
@@ -91,13 +102,18 @@ def merge(base: Path, update: Path) -> Path:
 
 
 def main():
-    if len(sys.argv) != 2:
-        raise SystemExit('usage: merge_update.py <game folder>')
-    folder = Path(sys.argv[1])
-    if not (folder / 'eboot.bin').is_file():
-        raise SystemExit(f'No eboot.bin in {folder}')
-    base, update = split(folder)
-    print(merge(base, update) if update else folder)
+    if len(sys.argv) not in (2, 3, 4):
+        raise SystemExit('usage: merge_update.py <game folder> [update folder] [merged folder]')
+    if len(sys.argv) >= 3:
+        base, update = Path(sys.argv[1]), Path(sys.argv[2])
+        target = Path(sys.argv[3]) if len(sys.argv) == 4 else None
+        print(merge(base, update, target))
+    else:
+        folder = Path(sys.argv[1])
+        if not (folder / 'eboot.bin').is_file():
+            raise SystemExit(f'No eboot.bin in {folder}')
+        base, update = split(folder)
+        print(merge(base, update) if update else folder)
 
 
 if __name__ == '__main__':
