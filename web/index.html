@@ -155,9 +155,12 @@
                 <span class="card-badge badge-green">Ready</span>
               </div>
               <div class="form-row">
-                <label for="inp-game-path">Merged Game Dump Location</label>
-                <input type="text" id="inp-game-path" class="styled-input" readonly>
-                <p class="field-hint">Contains UFC 4 base game files and update 28.00 linked cleanly.</p>
+                <label for="inp-game-path">Game Dump Location (CUSA14209)</label>
+                <div class="input-with-button">
+                  <input type="text" id="inp-game-path" class="styled-input" placeholder="Select your CUSA14209 or CUSA14209-merged folder">
+                  <button id="btn-browse-game" class="btn-secondary" title="Browse for UFC 4 folder">Browse...</button>
+                </div>
+                <p class="field-hint">Points to your UFC 4 game folder (CUSA14209) or CUSA14209-merged directory.</p>
               </div>
               <div class="info-callout">
                 <span class="callout-icon">💡</span>
@@ -336,7 +339,7 @@
     <footer class="app-footer">
       <div class="footer-left">
         <span class="footer-brand">EA SPORTS UFC® 4 — PC Native Port</span>
-        <span class="footer-meta">NVIDIA RTX 4060 · Vulkan 1.4 · 60 FPS Locked</span>
+        <span id="footer-meta-info" class="footer-meta">Detecting hardware...</span>
       </div>
       <div class="footer-right">
         <span id="session-status" class="session-status">Idle</span>

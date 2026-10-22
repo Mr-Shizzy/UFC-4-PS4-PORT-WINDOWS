@@ -127,7 +127,16 @@ document.addEventListener('DOMContentLoaded', () => {
       // Populate gamepads
       updateGamepadsList(data.gamepads || []);
 
-      // Populate saved settings if any
+      
+    // Update footer meta dynamically
+    const footerMeta = document.getElementById('footer-meta-info');
+    if (footerMeta) {
+      const fpsText = currentSettings.fps === '0' ? 'Unlimited FPS' : `${currentSettings.fps || '60'} FPS`;
+      const gpuText = data.gpu || 'Vulkan 1.4 GPU';
+      footerMeta.textContent = `${gpuText} · Vulkan 1.4 · ${fpsText}`;
+    }
+
+        // Populate saved settings if any
       if (data.settings) {
         applySettings(data.settings);
       }
@@ -221,6 +230,34 @@ document.addEventListener('DOMContentLoaded', () => {
    chkWriteWindows, chkPreupload, chkPreciseReadbacks, chkPipelineCache, chkSkipMovies,
    chkNeoMode, chkShowFps].forEach(el => {
     el.addEventListener('change', saveSettings);
+  });
+
+  
+  // Browse game folder button
+  const btnBrowseGame = document.getElementById('btn-browse-game');
+  if (btnBrowseGame) {
+    btnBrowseGame.addEventListener('click', async () => {
+      try {
+        btnBrowseGame.textContent = 'Selecting...';
+        const res = await fetch('/api/browse_game_dir', { method: 'POST' });
+        const data = await res.json();
+        if (data.success && data.game_path) {
+          inpGamePath.value = data.game_path;
+          currentSettings.game_path = data.game_path;
+          saveSettings();
+        }
+      } catch (err) {
+        console.error('Browse error:', err);
+      } finally {
+        btnBrowseGame.textContent = 'Browse...';
+      }
+    });
+  }
+
+  // Allow manual edit and save of game path
+  inpGamePath.addEventListener('change', () => {
+    currentSettings.game_path = inpGamePath.value.trim();
+    saveSettings();
   });
 
   // Rescan pads button

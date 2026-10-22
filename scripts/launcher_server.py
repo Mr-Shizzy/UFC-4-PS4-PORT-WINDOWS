@@ -91,6 +91,19 @@ class LauncherState:
 
 STATE = LauncherState()
 
+
+def browse_folder():
+    try:
+        # Use PowerShell Windows Forms folder picker
+        ps_cmd = 'Add-Type -AssemblyName System.Windows.Forms; $f = New-Object System.Windows.Forms.FolderBrowserDialog; $f.Description = "Select UFC 4 game dump folder (CUSA14209 or CUSA14209-merged)"; if ($f.ShowDialog() -eq "OK") { $f.SelectedPath }'
+        res = subprocess.run(["powershell", "-NoProfile", "-Command", ps_cmd], capture_output=True, text=True, timeout=30)
+        chosen = res.stdout.strip()
+        if chosen and os.path.isdir(chosen):
+            return chosen
+    except Exception as e:
+        print("Browse error:", e)
+    return None
+
 class LauncherHandler(SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, directory=WEB_DIR, **kwargs)
@@ -170,6 +183,17 @@ class LauncherHandler(SimpleHTTPRequestHandler):
         if path == "/api/settings":
             self.save_settings(req_data)
             self.send_json({"ok": True})
+            return
+
+                elif path == "/api/browse_game_dir":
+            selected = browse_folder()
+            if selected:
+                settings = self.load_settings()
+                settings["game_path"] = selected
+                self.save_settings(settings)
+                self.send_json({"success": True, "game_path": selected})
+            else:
+                self.send_json({"success": False})
             return
 
         elif path == "/api/rescan_pads":
@@ -325,7 +349,8 @@ class LauncherHandler(SimpleHTTPRequestHandler):
         import_names = os.path.join(ROOT_DIR, "out", "import_names.txt")
         content_bin = os.path.join(ROOT_DIR, "out", "content.bin")
         patches_bin = os.path.join(ROOT_DIR, "out", "patches.bin")
-        app0_dir = os.path.abspath(DEFAULT_GAME_PATH)
+        settings = self.load_settings()
+        app0_dir = os.path.abspath(settings.get("game_path") or DEFAULT_GAME_PATH)
 
         cmd = [
             game_bin,
