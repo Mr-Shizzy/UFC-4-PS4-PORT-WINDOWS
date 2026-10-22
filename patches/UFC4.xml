@@ -745,8 +745,27 @@
                   SignatureOffset="0x00"/>
         </PatchList>
     </Metadata>
+    <Metadata Title="EA SPORTS UFC 4"
+              Name="Match Victory Result Handler Null-Safety Bypass"
+              Note="Prevents crash in SimThread after match victory when corner fighter result subsystem is unallocated/null"
+              Author="Antigravity UFC4 Port"
+              PatchVer="1.0"
+              AppVer="28.00"
+              AppElf="eboot.bin"
+              isEnabled="true">
+        <PatchList>
+            <Line Type="bytes" Address="0x0072f981"
+                  Value="4885c07409488b084889c7ff6120c3"
+                  Signature="c3 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 48 83 bf e8 04 00 00"
+                  SignatureOffset="0x01"/>
+            <Line Type="bytes" Address="0x0072f81b"
+                  Value="e86101000090909090"
+                  Signature="48 8b 08 48 89 c7 ff 51 20 48 8d 7d c0 41 89 87 64 03 00 00"
+                  SignatureOffset="0x00"/>
+            <Line Type="bytes" Address="0x0072affa"
+                  Value="e88249000090909090"
+                  Signature="48 8b 08 48 89 c7 ff 51 20 48 8d 7d c0 41 89 84 24 3c 03 00 00"
+                  SignatureOffset="0x00"/>
+        </PatchList>
+    </Metadata>
 </Patch>
-
-
-
-
