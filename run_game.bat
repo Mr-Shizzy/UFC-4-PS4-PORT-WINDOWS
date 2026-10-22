@@ -21,6 +21,17 @@ set BB_Z16S8_AS_D16=1
 set BB_DRIVER_PIPELINE_CACHE=1
 set BB_PIPELINE_CACHE=1
 
+rem Fighter hair smoothing & anti-dithering (Vulkan Alpha-to-Coverage)
+set BB_ALPHA_TO_MASK=coverage
+
+rem Non-NVIDIA / Intel Arc / AMD RDNA LDS memory barrier safety (uncomment if using Intel Arc A580/B580 or AMD RX)
+rem set BB_INTEL_FIXES=1
+rem set BB_INTEL_LDS_BARRIERS=1
+rem set BB_NAN_GUARD=1
+rem set BB_FLATTEN_WG=1
+rem set BB_LDS_DIVERGENT=1
+rem set BB_SUBGROUP32=1
+
 rem Optional graphics & resolution enhancements:
 rem set BB_NEO=1
 rem set BB_RCAS=1

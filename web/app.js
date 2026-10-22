@@ -22,8 +22,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const selPresentMode = document.getElementById('sel-present-mode');
   const selSharpness = document.getElementById('sel-sharpness');
   const selUpscaler = document.getElementById('sel-upscaler');
+  const selGpuVendor = document.getElementById('sel-gpu-vendor');
 
+  const chkHairSmoothing = document.getElementById('chk-hair-smoothing');
   const chkWriteWindows = document.getElementById('chk-write-windows');
+
   const chkPreupload = document.getElementById('chk-preupload');
   const chkPreciseReadbacks = document.getElementById('chk-precise-readbacks');
   const chkPipelineCache = document.getElementById('chk-pipeline-cache');
@@ -41,13 +44,17 @@ document.addEventListener('DOMContentLoaded', () => {
     present_mode: "Mailbox",
     sharpness: "2",
     upscaler: "0",
+    gpu_vendor_mode: "auto",
+    hair_smoothing: true,
     write_windows: true,
     preupload: true,
     readbacks: true,
     pipeline_cache: true,
     skip_movies: true,
     neo_mode: false,
-    show_fps: true
+    show_fps: true,
+    game_path: "",
+    ufc3_game_path: ""
   };
 
   let logEventSource = null;
@@ -56,6 +63,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // Initialize
   initTabs();
   initSegmentControls();
+
+
   fetchStatus();
 
   // Tab Navigation
@@ -122,6 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       if (data.game_path) {
         inpGamePath.value = data.game_path;
+        currentSettings.game_path = data.game_path;
       }
 
       // Populate gamepads
@@ -176,8 +186,10 @@ document.addEventListener('DOMContentLoaded', () => {
     selPresentMode.value = currentSettings.present_mode || 'Mailbox';
     selSharpness.value = currentSettings.sharpness || '2';
     selUpscaler.value = currentSettings.upscaler || '0';
+    if (selGpuVendor) selGpuVendor.value = currentSettings.gpu_vendor_mode || 'auto';
 
     // Toggles
+    if (chkHairSmoothing) chkHairSmoothing.checked = currentSettings.hair_smoothing ?? true;
     chkWriteWindows.checked = currentSettings.write_windows ?? true;
     chkPreupload.checked = currentSettings.preupload ?? true;
     chkPreciseReadbacks.checked = currentSettings.readbacks ?? true;
@@ -206,6 +218,8 @@ document.addEventListener('DOMContentLoaded', () => {
       currentSettings.present_mode = selPresentMode.value;
       currentSettings.sharpness = selSharpness.value;
       currentSettings.upscaler = selUpscaler.value;
+      if (selGpuVendor) currentSettings.gpu_vendor_mode = selGpuVendor.value;
+      if (chkHairSmoothing) currentSettings.hair_smoothing = chkHairSmoothing.checked;
 
       currentSettings.write_windows = chkWriteWindows.checked;
       currentSettings.preupload = chkPreupload.checked;
@@ -227,8 +241,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Change listeners for instant auto-save
   [inpPlayerName, selLanguage, selController, selPresentMode, selSharpness, selUpscaler,
+   selGpuVendor, chkHairSmoothing,
    chkWriteWindows, chkPreupload, chkPreciseReadbacks, chkPipelineCache, chkSkipMovies,
-   chkNeoMode, chkShowFps].forEach(el => {
+   chkNeoMode, chkShowFps].filter(Boolean).forEach(el => {
     el.addEventListener('change', saveSettings);
   });
 

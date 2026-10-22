@@ -21,6 +21,8 @@ DEFAULT_GAME_PATH = os.path.join(ROOT_DIR, "..", "EA Sports UFC 4", "CUSA14209-m
 if not os.path.exists(DEFAULT_GAME_PATH):
     DEFAULT_GAME_PATH = os.path.join(ROOT_DIR, "EA Sports UFC 4", "CUSA14209-merged")
 
+
+
 os.makedirs(USER_DIR, exist_ok=True)
 os.makedirs(LOGS_DIR, exist_ok=True)
 
@@ -94,7 +96,6 @@ STATE = LauncherState()
 
 def browse_folder():
     try:
-        # Use PowerShell Windows Forms folder picker
         ps_cmd = 'Add-Type -AssemblyName System.Windows.Forms; $f = New-Object System.Windows.Forms.FolderBrowserDialog; $f.Description = "Select UFC 4 game dump folder (CUSA14209 or CUSA14209-merged)"; if ($f.ShowDialog() -eq "OK") { $f.SelectedPath }'
         res = subprocess.run(["powershell", "-NoProfile", "-Command", ps_cmd], capture_output=True, text=True, timeout=30)
         chosen = res.stdout.strip()
@@ -116,12 +117,13 @@ class LauncherHandler(SimpleHTTPRequestHandler):
         path = parsed.path
 
         if path == "/api/status":
+            settings = self.load_settings()
             self.send_json({
                 "gpu": STATE.gpu_name,
                 "gamepads": STATE.detect_gamepads(),
-                "game_path": os.path.abspath(DEFAULT_GAME_PATH),
+                "game_path": os.path.abspath(settings.get("game_path") or DEFAULT_GAME_PATH),
                 "is_running": STATE.game_process is not None and STATE.game_process.poll() is None,
-                "settings": self.load_settings()
+                "settings": settings
             })
             return
 
@@ -185,7 +187,7 @@ class LauncherHandler(SimpleHTTPRequestHandler):
             self.send_json({"ok": True})
             return
 
-                elif path == "/api/browse_game_dir":
+        elif path == "/api/browse_game_dir":
             selected = browse_folder()
             if selected:
                 settings = self.load_settings()
@@ -307,6 +309,30 @@ class LauncherHandler(SimpleHTTPRequestHandler):
 
         env["BB_FSR1"] = "1" if s.get("upscaler") == "1" else "0"
 
+        # Fighter hair smoothing & anti-dithering (Alpha-to-Coverage)
+        if s.get("hair_smoothing", True):
+            env["BB_ALPHA_TO_MASK"] = "coverage"
+        else:
+            env["BB_ALPHA_TO_MASK"] = "0"
+
+        # GPU Vendor / Architecture & Barrier Safety Profile
+        gpu_mode = s.get("gpu_vendor_mode", "auto")
+        gpu_str = STATE.gpu_name or ""
+        is_intel = (gpu_mode == "intel_arc") or (gpu_mode == "auto" and ("Intel" in gpu_str or "Arc" in gpu_str))
+        is_amd = (gpu_mode == "amd_rdna") or (gpu_mode == "auto" and ("AMD" in gpu_str or "Radeon" in gpu_str))
+
+        if is_intel:
+            env["BB_INTEL_FIXES"] = "1"
+            env["BB_INTEL_LDS_BARRIERS"] = "1"
+            env["BB_NAN_GUARD"] = "1"
+            env["BB_FLATTEN_WG"] = "1"
+            env["BB_LDS_DIVERGENT"] = "1"
+            env["BB_SUBGROUP32"] = "1"
+            env["BB_Z16S8_AS_D16"] = "1"
+        elif is_amd:
+            env["BB_Z16S8_AS_D16"] = "1"
+            env["BB_LDS_DIVERGENT"] = "1"
+
         # Memory & Stability (UFC 3 / UFC 4 optimal profile)
         env["BB_BP5264"] = "1"
         env["BB_BP_RECONV"] = "1"
@@ -344,12 +370,13 @@ class LauncherHandler(SimpleHTTPRequestHandler):
         if s.get("language"):
             env["BB_LANGUAGE"] = s["language"]
 
+        settings = self.load_settings()
+
         game_bin = os.path.join(ROOT_DIR, "bin", "sacredfire-game.exe")
         boot_linked = os.path.join(ROOT_DIR, "out", "boot-linked.bin")
         import_names = os.path.join(ROOT_DIR, "out", "import_names.txt")
         content_bin = os.path.join(ROOT_DIR, "out", "content.bin")
         patches_bin = os.path.join(ROOT_DIR, "out", "patches.bin")
-        settings = self.load_settings()
         app0_dir = os.path.abspath(settings.get("game_path") or DEFAULT_GAME_PATH)
 
         cmd = [

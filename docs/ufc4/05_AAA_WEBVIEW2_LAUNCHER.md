@@ -45,3 +45,13 @@ Uses HTML5 Server-Sent Events (SSE). The Python server captures game process out
 
 ### Graceful Termination (`/api/stop`)
 Sends `WM_CLOSE` / `SIGTERM` followed by a clean process join, ensuring Vulkan driver pipeline caches are flushed to disk without corruption.
+
+
+## 7. GPU Architecture & Hair Anti-Dithering Controls
+
+* **Fighter Hair Anti-Dithering (`BB_ALPHA_TO_MASK=coverage`):** Converts console screen-door dither discard into native Vulkan Alpha-to-Coverage, eliminating pixel grid noise on hair, beards, and braids.
+* **GPU Compatibility Profiles:**
+  * **Auto-Detect:** Selects optimal barrier settings based on detected GPU.
+  * **NVIDIA GeForce:** Full mailbox presentation with zero barrier stall overhead.
+  * **Intel Arc Safety (A580/B580):** Injects `BB_INTEL_FIXES=1`, `BB_INTEL_LDS_BARRIERS=1`, `BB_SUBGROUP32=1`, and `BB_LDS_DIVERGENT=1` to prevent black octagon scenes.
+  * **AMD RDNA Strict:** Enforces `BB_Z16S8_AS_D16=1` and `BB_LDS_DIVERGENT=1`.
