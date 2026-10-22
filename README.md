@@ -10,6 +10,20 @@ Built upon the native port lineage of **SacredFire** and **bbport**, adapted for
 
 ---
 
+## 📚 Technical Documentation & Architecture Guidelines
+
+For an in-depth breakdown of the architecture, memory model, and stability patches, consult the **[UFC 4 Architecture & Developer Guidelines](docs/ufc4/README.md)**:
+
+* **[01. Architecture & Runtime Design](docs/ufc4/01_ARCHITECTURE.md):** Native x86-64 execution, Orbis OS runtime, Vulkan 1.3/1.4 translator.
+* **[02. Binary Pipeline & Symbol Resolution](docs/ufc4/02_BINARY_PIPELINE.md):** ELF extraction, offline PRX module linking, and NID resolution via `aerolib.inl`.
+* **[03. EA Ignite Engine & Memory Coherence](docs/ufc4/03_IGNITE_ENGINE_AND_MEMORY.md):** Write Windows (`BB_WRITE_WINDOW=1`), dynamic vertex buffers, eliminating vertex explosions and stutter.
+* **[04. Stability Patches & Null-Safety](docs/ufc4/04_STABILITY_AND_PATCHES.md):** 46+ Dual-Baked XML patches, DirtySDK offline fallback, UI & appearance backpressure.
+* **[05. AAA WebView2 Desktop Launcher](docs/ufc4/05_AAA_WEBVIEW2_LAUNCHER.md):** C++ Win32 host, embedded WebView2, REST API, and live console streaming.
+* **[06. Packaging & Release Workflow](docs/ufc4/06_PACKAGING_AND_RELEASES.md):** Source vs. binary release distribution model.
+* **[07. Troubleshooting & Known Community Bugs](docs/ufc4/07_TROUBLESHOOTING_AND_FAQ.md):** Fixes for PS4 Pro freeze, black screen readbacks, and vertex explosion bugs.
+
+---
+
 ## Features
 
 - **Unlocked Framerate & Smooth Frame Pacing:** Uncapped 30 FPS console limit; supports smooth **60 FPS, 120 FPS, 144 FPS, 240 FPS or Unlimited** playback.
