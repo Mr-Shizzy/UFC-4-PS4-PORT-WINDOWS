@@ -1,0 +1,752 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Patch>
+    <TitleID>
+        <ID>CUSA14209</ID>
+    </TitleID>
+    <Metadata Title="EA SPORTS™ UFC® 4"
+              Name="DirtyHttpCM Null-Safety Bypass"
+              Note="Prevents crash in SimThread when DirtySDK DirtyHttpCM is not initialized"
+              Author="Antigravity UFC4 Port"
+              PatchVer="1.0"
+              AppVer="28.00"
+              AppElf="eboot.bin"
+              isEnabled="true">
+        <PatchList>
+            <Line Type="bytes" Address="0x0177cdd0"
+                  Value="81ff73636e6d7510488b05a1769e014885c074088b4018c36aff58c36a0a58c3"
+                  Signature="b8 ff ff ff ff 81 ff 73 63 6e 6d 75 0a 48 8b 05 9c 76 9e 01 8b 40 18 c3"
+                  SignatureOffset="0x00"/>
+        </PatchList>
+    </Metadata>
+    <Metadata Title="EA SPORTS™ UFC® 4"
+              Name="DirtyHttpCM Telemetry Client Offline Bypass"
+              Note="Bypasses DirtyHttpCM client allocation in telemetry setup to cleanly trigger offline fallback"
+              Author="Antigravity UFC4 Port"
+              PatchVer="1.0"
+              AppVer="28.00"
+              AppElf="eboot.bin"
+              isEnabled="true">
+        <PatchList>
+            <Line Type="bytes" Address="0x017232c1"
+                  Value="b8ffffffff"
+                  Signature="e8 7a 92 05 00 85 c0 89 43 0c 0f 88"
+                  SignatureOffset="0x00"/>
+        </PatchList>
+    </Metadata>
+    <Metadata Title="EA SPORTS™ UFC® 4"
+              Name="DirtyHttpCM Telemetry Cleanup Skip"
+              Note="Skips unallocated DirtyHttpCM client freeing in telemetry cleanup during offline mode"
+              Author="Antigravity UFC4 Port"
+              PatchVer="1.0"
+              AppVer="28.00"
+              AppElf="eboot.bin"
+              isEnabled="true">
+        <PatchList>
+            <Line Type="bytes" Address="0x01723864"
+                  Value="eb25909090909090"
+                  Signature="41 8b 7f 14 85 ff 78 05"
+                  SignatureOffset="0x00"/>
+        </PatchList>
+    </Metadata>
+    <Metadata Title="EA SPORTS™ UFC® 4"
+              Name="DirtyHttpCM Service Destroy Null Skip"
+              Note="Skips destroying NULL telemetry service during offline teardown"
+              Author="Antigravity UFC4 Port"
+              PatchVer="1.0"
+              AppVer="28.00"
+              AppElf="eboot.bin"
+              isEnabled="true">
+        <PatchList>
+            <Line Type="bytes" Address="0x01722bf6"
+                  Value="9090909090"
+                  Signature="8b bb 90 03 00 00 e8 75 09 00 00"
+                  SignatureOffset="0x06"/>
+        </PatchList>
+    </Metadata>
+    <Metadata Title="EA SPORTS™ UFC® 4"
+              Name="DirtyHttpCM Online Manager Offline Bypass"
+              Note="Bypasses DirtyHttpCM client allocation in online manager to cleanly trigger offline fallback"
+              Author="Antigravity UFC4 Port"
+              PatchVer="1.0"
+              AppVer="28.00"
+              AppElf="eboot.bin"
+              isEnabled="true">
+        <PatchList>
+            <Line Type="bytes" Address="0x01760377"
+                  Value="b8ffffffff"
+                  Signature="e8 c4 c1 01 00 85 c0 78 3b 41 89 c6"
+                  SignatureOffset="0x00"/>
+        </PatchList>
+    </Metadata>
+    <Metadata Title="EA SPORTS™ UFC® 4"
+              Name="DirtySDK Session Manager Offline Bypass"
+              Note="Bypasses uninitialized DirtySDK session manager registration to cleanly trigger offline fallback"
+              Author="Antigravity UFC4 Port"
+              PatchVer="1.0"
+              AppVer="28.00"
+              AppElf="eboot.bin"
+              isEnabled="true">
+        <PatchList>
+            <Line Type="bytes" Address="0x01727f30"
+                  Value="b8ffffffffc3"
+                  Signature="e9 fb 40 05 00 90 90 90 90 90 90"
+                  SignatureOffset="0x00"/>
+        </PatchList>
+    </Metadata>
+    <Metadata Title="EA SPORTS™ UFC® 4"
+              Name="Scene Context RenderDevice Null-Safety Bypass"
+              Note="Prevents crash in scene context setup when RenderDevice context is NULL"
+              Author="Antigravity UFC4 Port"
+              PatchVer="1.0"
+              AppVer="28.00"
+              AppElf="eboot.bin"
+              isEnabled="true">
+        <PatchList>
+            <Line Type="bytes" Address="0x01012612"
+                  Value="4885ff7460488b876807000049894630"
+                  Signature="48 8b 87 68 07 00 00 48 85 c0 49 89 46 30 74 2f"
+                  SignatureOffset="0x00"/>
+        </PatchList>
+    </Metadata>
+    <Metadata Title="EA SPORTS™ UFC® 4"
+              Name="Container GetItem Null-Safety Bypass"
+              Note="Prevents crash in container lookup when container pointer is NULL"
+              Author="Antigravity UFC4 Port"
+              PatchVer="1.0"
+              AppVer="28.00"
+              AppElf="eboot.bin"
+              isEnabled="true">
+        <PatchList>
+            <Line Type="bytes" Address="0x013fede0"
+                  Value="4885ff741e488b87780c00004885c0741239b788020000760a488b0089f1488b04c8c331c0c390909090909090909090"
+                  Signature="48 8b 87 78 0c 00 00 48 85 c0 74 12 39 b7 88 02"
+                  SignatureOffset="0x00"/>
+        </PatchList>
+    </Metadata>
+    <Metadata Title="EA SPORTS™ UFC® 4"
+              Name="Container Iterator Null-Safety Bypass"
+              Note="Prevents crash in container iteration 0xf9a720 when container pointer is NULL"
+              Author="Antigravity UFC4 Port"
+              PatchVer="1.0"
+              AppVer="28.00"
+              AppElf="eboot.bin"
+              isEnabled="true">
+        <PatchList>
+            <Line Type="bytes" Address="0x0139a712"
+                  Value="4885ff7408554889e5eb079090c3ebf09090"
+                  Signature="40 10 09 00 48 89 08 5b 41 5e 5d c3 90 90 90 90 90 90"
+                  SignatureOffset="0x0c"/>
+        </PatchList>
+    </Metadata>
+    <Metadata Title="EA SPORTS™ UFC® 4"
+              Name="Container Iterator 0x38b690 Null-Safety Bypass"
+              Note="Prevents crash in container iteration 0x38b690 when container pointer is NULL"
+              Author="Antigravity UFC4 Port"
+              PatchVer="1.0"
+              AppVer="28.00"
+              AppElf="eboot.bin"
+              isEnabled="true">
+        <PatchList>
+            <Line Type="bytes" Address="0x0078b682"
+                  Value="4885ff7408554889e5eb079090c3ebf09090"
+                  Signature="40 10 c5 08 48 89 08 5b 41 5e 5d c3 90 90 90 90 90 90"
+                  SignatureOffset="0x0c"/>
+        </PatchList>
+    </Metadata>
+    <Metadata Title="EA SPORTS™ UFC® 4"
+              Name="Container Iterator 0x358140 Null-Safety Bypass"
+              Note="Prevents crash in container iteration 0x358140 when container pointer is NULL"
+              Author="Antigravity UFC4 Port"
+              PatchVer="1.0"
+              AppVer="28.00"
+              AppElf="eboot.bin"
+              isEnabled="true">
+        <PatchList>
+            <Line Type="bytes" Address="0x00758132"
+                  Value="4885ff7408554889e5eb079090c3ebf09090"
+                  Signature="40 10 15 08 48 89 08 5b 41 5e 5d c3 90 90 90 90 90 90"
+                  SignatureOffset="0x0c"/>
+        </PatchList>
+    </Metadata>
+    <Metadata Title="EA SPORTS™ UFC® 4"
+              Name="Container Iterator 0x38b440 Null-Safety Bypass"
+              Note="Prevents crash in container iteration 0x38b440 when container pointer is NULL"
+              Author="Antigravity UFC4 Port"
+              PatchVer="1.0"
+              AppVer="28.00"
+              AppElf="eboot.bin"
+              isEnabled="true">
+        <PatchList>
+            <Line Type="bytes" Address="0x0078b432"
+                  Value="4885ff7408554889e5eb079090c3ebf09090"
+                  Signature="40 10 63 08 48 89 08 5b 41 5e 5d c3 90 90 90 90 90 90"
+                  SignatureOffset="0x0c"/>
+        </PatchList>
+    </Metadata>
+    <Metadata Title="EA SPORTS™ UFC® 4"
+              Name="Container Iterator 0x38b570 Null-Safety Bypass"
+              Note="Prevents crash in container iteration 0x38b570 when container pointer is NULL"
+              Author="Antigravity UFC4 Port"
+              PatchVer="1.0"
+              AppVer="28.00"
+              AppElf="eboot.bin"
+              isEnabled="true">
+        <PatchList>
+            <Line Type="bytes" Address="0x0078b562"
+                  Value="4885ff7408554889e5eb079090c3ebf09090"
+                  Signature="40 10 62 08 48 89 08 5b 41 5e 5d c3 90 90 90 90 90 90"
+                  SignatureOffset="0x0c"/>
+        </PatchList>
+    </Metadata>
+    <Metadata Title="EA SPORTS™ UFC® 4"
+              Name="Container Iterator 0x38b7b0 Null-Safety Bypass"
+              Note="Prevents crash in container iteration 0x38b7b0 when container pointer is NULL"
+              Author="Antigravity UFC4 Port"
+              PatchVer="1.0"
+              AppVer="28.00"
+              AppElf="eboot.bin"
+              isEnabled="true">
+        <PatchList>
+            <Line Type="bytes" Address="0x0078b7a2"
+                  Value="4885ff7408554889e5eb079090c3ebf09090"
+                  Signature="40 10 4f 08 48 89 08 5b 41 5e 5d c3 90 90 90 90 90 90"
+                  SignatureOffset="0x0c"/>
+        </PatchList>
+    </Metadata>
+    <Metadata Title="EA SPORTS™ UFC® 4"
+              Name="Container Iterator 0x38b8c0 Null-Safety Bypass"
+              Note="Prevents crash in container iteration 0x38b8c0 when container pointer is NULL"
+              Author="Antigravity UFC4 Port"
+              PatchVer="1.0"
+              AppVer="28.00"
+              AppElf="eboot.bin"
+              isEnabled="true">
+        <PatchList>
+            <Line Type="bytes" Address="0x0078b8b2"
+                  Value="4885ff7408554889e5eb079090c3ebf09090"
+                  Signature="40 10 c3 0a 48 89 08 5b 41 5e 5d c3 90 90 90 90 90 90"
+                  SignatureOffset="0x0c"/>
+        </PatchList>
+    </Metadata>
+    <Metadata Title="EA SPORTS™ UFC® 4"
+              Name="Container Iterator 0xb144f0 Null-Safety Bypass"
+              Note="Prevents crash in container iteration 0xb144f0 when container pointer is NULL"
+              Author="Antigravity UFC4 Port"
+              PatchVer="1.0"
+              AppVer="28.00"
+              AppElf="eboot.bin"
+              isEnabled="true">
+        <PatchList>
+            <Line Type="bytes" Address="0x00f144e2"
+                  Value="4885ff7408554889e5eb079090c3ebf09090"
+                  Signature="40 10 c5 0a 48 89 08 5b 41 5e 5d c3 90 90 90 90 90 90"
+                  SignatureOffset="0x0c"/>
+        </PatchList>
+    </Metadata>
+    <Metadata Title="EA SPORTS™ UFC® 4"
+              Name="Container Iterator 0xf93a40 Null-Safety Bypass"
+              Note="Prevents crash in container iteration 0xf93a40 when container pointer is NULL"
+              Author="Antigravity UFC4 Port"
+              PatchVer="1.0"
+              AppVer="28.00"
+              AppElf="eboot.bin"
+              isEnabled="true">
+        <PatchList>
+            <Line Type="bytes" Address="0x01393a32"
+                  Value="4885ff7408554889e5eb079090c3ebf09090"
+                  Signature="40 10 01 00 48 89 08 5b 41 5e 5d c3 90 90 90 90 90 90"
+                  SignatureOffset="0x0c"/>
+        </PatchList>
+    </Metadata>
+    <Metadata Title="EA SPORTS™ UFC® 4"
+              Name="Container Iterator 0xf993d0 Null-Safety Bypass"
+              Note="Prevents crash in container iteration 0xf993d0 when container pointer is NULL"
+              Author="Antigravity UFC4 Port"
+              PatchVer="1.0"
+              AppVer="28.00"
+              AppElf="eboot.bin"
+              isEnabled="true">
+        <PatchList>
+            <Line Type="bytes" Address="0x013993c2"
+                  Value="4885ff7408554889e5eb079090c3ebf09090"
+                  Signature="40 10 1b 00 48 89 08 5b 41 5e 5d c3 90 90 90 90 90 90"
+                  SignatureOffset="0x0c"/>
+        </PatchList>
+    </Metadata>
+    <Metadata Title="EA SPORTS™ UFC® 4"
+              Name="Container Iterator 0xf994d0 Null-Safety Bypass"
+              Note="Prevents crash in container iteration 0xf994d0 when container pointer is NULL"
+              Author="Antigravity UFC4 Port"
+              PatchVer="1.0"
+              AppVer="28.00"
+              AppElf="eboot.bin"
+              isEnabled="true">
+        <PatchList>
+            <Line Type="bytes" Address="0x013994c2"
+                  Value="4885ff7408554889e5eb079090c3ebf09090"
+                  Signature="40 10 05 00 48 89 08 5b 41 5e 5d c3 90 90 90 90 90 90"
+                  SignatureOffset="0x0c"/>
+        </PatchList>
+    </Metadata>
+    <Metadata Title="EA SPORTS™ UFC® 4"
+              Name="Container Iterator 0xf99cf0 Null-Safety Bypass"
+              Note="Prevents crash in container iteration 0xf99cf0 when container pointer is NULL"
+              Author="Antigravity UFC4 Port"
+              PatchVer="1.0"
+              AppVer="28.00"
+              AppElf="eboot.bin"
+              isEnabled="true">
+        <PatchList>
+            <Line Type="bytes" Address="0x01399ce2"
+                  Value="4885ff7408554889e5eb079090c3ebf09090"
+                  Signature="fc 11 80 d8 00 00 00 5b 41 5e 5d c3 90 90 90 90 90 90"
+                  SignatureOffset="0x0c"/>
+        </PatchList>
+    </Metadata>
+    <Metadata Title="EA SPORTS™ UFC® 4"
+              Name="Container Iterator 0x1582f60 Null-Safety Bypass"
+              Note="Prevents crash in container iteration 0x1582f60 when container pointer is NULL"
+              Author="Antigravity UFC4 Port"
+              PatchVer="1.0"
+              AppVer="28.00"
+              AppElf="eboot.bin"
+              isEnabled="true">
+        <PatchList>
+            <Line Type="bytes" Address="0x01982f52"
+                  Value="4885ff7408554889e5eb079090c3ebf09090"
+                  Signature="40 10 4d 08 48 89 08 5b 41 5e 5d c3 90 90 90 90 90 90"
+                  SignatureOffset="0x0c"/>
+        </PatchList>
+    </Metadata>
+    <Metadata Title="EA SPORTS™ UFC® 4"
+              Name="Container Iterator 0x1607390 Null-Safety Bypass"
+              Note="Prevents crash in container iteration 0x1607390 when container pointer is NULL"
+              Author="Antigravity UFC4 Port"
+              PatchVer="1.0"
+              AppVer="28.00"
+              AppElf="eboot.bin"
+              isEnabled="true">
+        <PatchList>
+            <Line Type="bytes" Address="0x01a07382"
+                  Value="4885ff7408554889e5eb079090c3ebf09090"
+                  Signature="40 10 c7 08 48 89 08 5b 41 5e 5d c3 90 90 90 90 90 90"
+                  SignatureOffset="0x0c"/>
+        </PatchList>
+    </Metadata>
+    <Metadata Title="EA SPORTS™ UFC® 4"
+              Name="Container Iterator 0x189f050 Null-Safety Bypass"
+              Note="Prevents crash in container iteration 0x189f050 when container pointer is NULL"
+              Author="Antigravity UFC4 Port"
+              PatchVer="1.0"
+              AppVer="28.00"
+              AppElf="eboot.bin"
+              isEnabled="true">
+        <PatchList>
+            <Line Type="bytes" Address="0x01c9f042"
+                  Value="4885ff7408554889e5eb079090c3ebf09090"
+                  Signature="40 10 cd 08 48 89 08 5b 41 5e 5d c3 90 90 90 90 90 90"
+                  SignatureOffset="0x0c"/>
+        </PatchList>
+    </Metadata>
+    <Metadata Title="EA SPORTS™ UFC® 4"
+              Name="Container Iterator 0x18b0590 Null-Safety Bypass"
+              Note="Prevents crash in container iteration 0x18b0590 when container pointer is NULL"
+              Author="Antigravity UFC4 Port"
+              PatchVer="1.0"
+              AppVer="28.00"
+              AppElf="eboot.bin"
+              isEnabled="true">
+        <PatchList>
+            <Line Type="bytes" Address="0x01cb0582"
+                  Value="4885ff7408554889e5eb079090c3ebf09090"
+                  Signature="40 10 16 08 48 89 08 5b 41 5e 5d c3 90 90 90 90 90 90"
+                  SignatureOffset="0x0c"/>
+        </PatchList>
+    </Metadata>
+    <Metadata Title="EA SPORTS™ UFC® 4"
+              Name="TelemetryControl Queue Buffer Null-Safety Bypass"
+              Note="Skips writing queue buffer size to NULL telemetry service in TelemetryControl 'sbqr'"
+              Author="Antigravity UFC4 Port"
+              PatchVer="1.0"
+              AppVer="28.00"
+              AppElf="eboot.bin"
+              isEnabled="true">
+        <PatchList>
+            <Line Type="bytes" Address="0x017202d6"
+                  Value="90909090909090"
+                  Signature="81 fe 73 62 71 72 0f 85 6a 04 00 00 41 89 97 98 03 00 00"
+                  SignatureOffset="0x0c"/>
+        </PatchList>
+    </Metadata>
+    <Metadata Title="EA SPORTS™ UFC® 4"
+              Name="Container Setup 0xfbac00 Null-Safety Bypass"
+              Note="Prevents crash in container setup 0xfbac00 when container pointer is NULL"
+              Author="Antigravity UFC4 Port"
+              PatchVer="1.0"
+              AppVer="28.00"
+              AppElf="eboot.bin"
+              isEnabled="true">
+        <PatchList>
+            <Line Type="bytes" Address="0x013babfa"
+                  Value="4885ff742790"
+                  Signature="70 84 c0 74 07 44 8b b3 78 01 00 00 44 89 f0 5b 41 5e 5d c3"
+                  SignatureOffset="0x14"/>
+        </PatchList>
+    </Metadata>
+    <Metadata Title="EA SPORTS™ UFC® 4"
+              Name="Container Setup 0x349e3e Call Redirect"
+              Note="Redirects call to null-safe stub 0xfbabfa"
+              Author="Antigravity UFC4 Port"
+              PatchVer="1.0"
+              AppVer="28.00"
+              AppElf="eboot.bin"
+              isEnabled="true">
+        <PatchList>
+            <Line Type="bytes" Address="0x00749e3f"
+                  Value="b7"
+                  Signature="c7 45 a0 01 00 00 00 49 8b bf 88 00 00 00 e8 bd 0d c7 00"
+                  SignatureOffset="0x0f"/>
+        </PatchList>
+    </Metadata>
+    <Metadata Title="EA SPORTS™ UFC® 4"
+              Name="Container GetSubObjectField 0xffee10 Null-Safety Bypass"
+              Note="Prevents crash in container sub-object getter 0xffee10 when container pointer is NULL"
+              Author="Antigravity UFC4 Port"
+              PatchVer="1.0"
+              AppVer="28.00"
+              AppElf="eboot.bin"
+              isEnabled="true">
+        <PatchList>
+            <Line Type="bytes" Address="0x013fee06"
+                  Value="4885ff74f8eb05909090ebf4488b87980700008b8078050000c3"
+                  Signature="48 8b 87 98 07 00 00 8b 80 78 05 00 00 c3 90 90"
+                  SignatureOffset="-0x0a"/>
+        </PatchList>
+    </Metadata>
+    <Metadata Title="EA SPORTS™ UFC® 4"
+              Name="Scene Node Tail Call 0x3330fe Null-Safety Bypass"
+              Note="Prevents crash in scene node tail virtual call 0x3330fe when node object is NULL"
+              Author="Antigravity UFC4 Port"
+              PatchVer="1.0"
+              AppVer="28.00"
+              AppElf="eboot.bin"
+              isEnabled="true">
+        <PatchList>
+            <Line Type="bytes" Address="0x007330fe"
+                  Value="5b415e5d4885c07406488b08ff6120c39090"
+                  Signature="48 89 43 28 48 89 c7 48 89 de 48 8b 08 48 8b 49 20 5b"
+                  SignatureOffset="0x0a"/>
+        </PatchList>
+    </Metadata>
+    <Metadata Title="EA SPORTS™ UFC® 4"
+              Name="Container Node Tail Call 0x31d2b0 Null-Safety Bypass"
+              Note="Prevents crash in container node tail call 0x31d2b0 when container pointer is NULL"
+              Author="Antigravity UFC4 Port"
+              PatchVer="1.0"
+              AppVer="28.00"
+              AppElf="eboot.bin"
+              isEnabled="true">
+        <PatchList>
+            <Line Type="bytes" Address="0x0071d2b0"
+                  Value="4885c074074803b8480c0000595b415e415f5d4885c07405e9e306faffc39090"
+                  Signature="bf f8 01 00 00 4c 89 fe 48 03 b8 48 0c 00 00 48"
+                  SignatureOffset="0x08"/>
+        </PatchList>
+    </Metadata>
+    <Metadata Title="EA SPORTS™ UFC® 4"
+              Name="Container Virtual Dispatch 0xffdce0 Null-Safety Bypass"
+              Note="Intercepts virtual method call 0xffdce0; safely returns empty vector descriptor when container or sub-object is NULL"
+              Author="Antigravity UFC4 Port"
+              PatchVer="1.0"
+              AppVer="28.00"
+              AppElf="eboot.bin"
+              isEnabled="true">
+        <PatchList>
+            <Line Type="bytes" Address="0x023b0480"
+                  Value="4885ff7415488bbf680700004885ff7409488b07488b4028ffe0488d0507000000c39090909090900000000000000000000000000000000000000000000000000000000000000000"
+                  Signature="54 72 6f 70 68 79 52 75 6e 6e 65 72 00 00 00 00"
+                  SignatureOffset="0x10"/>
+            <Line Type="bytes" Address="0x013fdce0"
+                  Value="e99b27fb009090909090909090909090"
+                  Signature="48 8b bf 68 07 00 00 48 8b 07 48 8b 40 28 ff e0"
+                  SignatureOffset="0x00"/>
+        </PatchList>
+    </Metadata>
+    <Metadata Title="EA SPORTS™ UFC® 4"
+              Name="Container GetSubObjectItem 0xffedb0 Null-Safety Bypass"
+              Note="Prevents crash in container sub-object item getter 0xffedb0 when container pointer is NULL"
+              Author="Antigravity UFC4 Port"
+              PatchVer="1.0"
+              AppVer="28.00"
+              AppElf="eboot.bin"
+              isEnabled="true">
+        <PatchList>
+            <Line Type="bytes" Address="0x013fedb0"
+                  Value="4885ff741e488b87680c00004885c0741239b788020000760a488b0089f1488b04c8c3488d052617fb00c39090909090"
+                  Signature="48 8b 87 68 0c 00 00 48 85 c0 74 12 39 b7 88 02"
+                  SignatureOffset="0x00"/>
+        </PatchList>
+    </Metadata>
+    <Metadata Title="EA SPORTS™ UFC® 4"
+              Name="Container ProcessItems 0xff95c0 Null-Safety Bypass"
+              Note="Prevents crash in container item processing 0xff95c0 when container pointer is NULL"
+              Author="Antigravity UFC4 Port"
+              PatchVer="1.0"
+              AppVer="28.00"
+              AppElf="eboot.bin"
+              isEnabled="true">
+        <PatchList>
+            <Line Type="bytes" Address="0x023b04d0"
+                  Value="4885ff740b554889e54157e9e69004ffc3"
+                  Signature="54 72 6f 70 68 79 52 75 6e 6e 65 72 00 00 00 00"
+                  SignatureOffset="0x60"/>
+            <Line Type="bytes" Address="0x013f95c0"
+                  Value="e90b6ffb0090"
+                  Signature="55 48 89 e5 41 57 41 56 41 55 41 54 53 48 83 ec"
+                  SignatureOffset="0x00"/>
+        </PatchList>
+    </Metadata>
+    <Metadata Title="EA SPORTS™ UFC® 4"
+              Name="Atlas Layer Setup 0x620c8b Null-Safety Bypass"
+              Note="Prevents crash in atlas layer setup 0x620c8b when sub-object item pointer is NULL"
+              Author="Antigravity UFC4 Port"
+              PatchVer="1.0"
+              AppVer="28.00"
+              AppElf="eboot.bin"
+              isEnabled="true">
+        <PatchList>
+            <Line Type="bytes" Address="0x00a20c8b"
+                  Value="488b78404889bb384100004885ff7455be6d6170736a015a31c9e89639000090909090909090"
+                  Signature="48 8b 78 40 be 6d 61 70 73 ba 01 00 00 00 31 c9"
+                  SignatureOffset="0x00"/>
+        </PatchList>
+    </Metadata>
+    <Metadata Title="EA SPORTS™ UFC® 4"
+              Name="Container Subsystem 0xf078f0 Null-Safety Bypass"
+              Note="Prevents crash in container subsystem init 0xf078f0 when container pointer is NULL"
+              Author="Antigravity UFC4 Port"
+              PatchVer="1.0"
+              AppVer="28.00"
+              AppElf="eboot.bin"
+              isEnabled="true">
+        <PatchList>
+            <Line Type="bytes" Address="0x013078e4"
+                  Value="4885ff7406554889e5eb05c3ebf29090"
+                  Signature="48 01 37 c3 90 90 90 90 90 90 90 90 90 90 90 90"
+                  SignatureOffset="0x04"/>
+        </PatchList>
+    </Metadata>
+    <Metadata Title="EA SPORTS™ UFC® 4"
+              Name="Scene Context Reporter 0xfa3f80 Null-Safety Bypass"
+              Note="Prevents crash in scene context reporter 0xfa3f80 when scene context pointer is NULL"
+              Author="Antigravity UFC4 Port"
+              PatchVer="1.0"
+              AppVer="28.00"
+              AppElf="eboot.bin"
+              isEnabled="true">
+        <PatchList>
+            <Line Type="bytes" Address="0x023b0600"
+                  Value="4885ff740b554889e54157e97639fffec3"
+                  Signature="54 72 6f 70 68 79 52 75 6e 6e 65 72 00 00 00 00"
+                  SignatureOffset="0x190"/>
+            <Line Type="bytes" Address="0x013a3f80"
+                  Value="e97bc6000190"
+                  Signature="55 48 89 e5 41 57 41 56 41 55 41 54 53 48 83 e4"
+                  SignatureOffset="0x00"/>
+        </PatchList>
+    </Metadata>
+    <Metadata Title="EA SPORTS™ UFC® 4"
+              Name="Scene Object Updater 0x1336c80 Null-Safety Bypass"
+              Note="Prevents crash in scene object updater 0x1336c80 when target object pointer is NULL"
+              Author="Antigravity UFC4 Port"
+              PatchVer="1.0"
+              AppVer="28.00"
+              AppElf="eboot.bin"
+              isEnabled="true">
+        <PatchList>
+            <Line Type="bytes" Address="0x023b0620"
+                  Value="4885ff740b554889e54157e9566638ffc3"
+                  Signature="54 72 6f 70 68 79 52 75 6e 6e 65 72 00 00 00 00"
+                  SignatureOffset="0x1b0"/>
+            <Line Type="bytes" Address="0x01736c80"
+                  Value="e99b99c70090"
+                  Signature="55 48 89 e5 41 57 41 56 41 55 41 54 53 48 81 ec"
+                  SignatureOffset="0x00"/>
+        </PatchList>
+    </Metadata>
+    <Metadata Title="EA SPORTS™ UFC® 4"
+              Name="Sim Component 0x375502 Null-Safety Bypass"
+              Note="Prevents crash in SimThread component updater 0x375502 when context field 0x48(%rdi) is NULL"
+              Author="Antigravity UFC4 Port"
+              PatchVer="1.0"
+              AppVer="28.00"
+              AppElf="eboot.bin"
+              isEnabled="true">
+        <PatchList>
+            <Line Type="bytes" Address="0x023b0640"
+                  Value="488b47484885c07418488b80480c00004885c0740c488bb8e8010000e9b34e3cfee9ac4f3cfe"
+                  Signature="54 72 6f 70 68 79 52 75 6e 6e 65 72 00 00 00 00"
+                  SignatureOffset="0x1d0"/>
+            <Line Type="bytes" Address="0x00775502"
+                  Value="e939b1c30190909090909090909090909090"
+                  Signature="48 8b 47 48 48 8b 80 48 0c 00 00 48 8b b8 e8 01 00 00"
+                  SignatureOffset="0x00"/>
+        </PatchList>
+    </Metadata>
+    <Metadata Title="EA SPORTS™ UFC® 4"
+              Name="Sim Dispatcher 0xc10020 Null-Safety Bypass"
+              Note="Prevents crash in SimThread component dispatcher loop 0xc10020 when handler pointer is NULL"
+              Author="Antigravity UFC4 Port"
+              PatchVer="1.0"
+              AppVer="28.00"
+              AppElf="eboot.bin"
+              isEnabled="true">
+        <PatchList>
+            <Line Type="bytes" Address="0x023b0680"
+                  Value="488b7b104885ff740bc5fa1045ec488b07ff5010e996f9c5fe"
+                  Signature="54 72 6f 70 68 79 52 75 6e 6e 65 72 00 00 00 00"
+                  SignatureOffset="0x210"/>
+            <Line Type="bytes" Address="0x01010020"
+                  Value="e95b063a0190909090909090909090"
+                  Signature="48 8b 7b 10 c5 fa 10 45 ec 48 8b 07 ff 50 10"
+                  SignatureOffset="0x00"/>
+        </PatchList>
+    </Metadata>
+    <Metadata Title="EA SPORTS™ UFC® 4"
+              Name="Scene Object Event 0x2bd0ef Null-Safety Bypass"
+              Note="Prevents crash in scene object event notifier 0x2bd0ef when context pointer is NULL"
+              Author="Antigravity UFC4 Port"
+              PatchVer="1.0"
+              AppVer="28.00"
+              AppElf="eboot.bin"
+              isEnabled="true">
+        <PatchList>
+            <Line Type="bytes" Address="0x023b06b0"
+                  Value="488b43404883c3284885c07415488bb8480c00004885ff74094889de488b07ff5058e930ca30fe"
+                  Signature="54 72 6f 70 68 79 52 75 6e 6e 65 72 00 00 00 00"
+                  SignatureOffset="0x240"/>
+            <Line Type="bytes" Address="0x006bd0ef"
+                  Value="e9bc35cf0190909090909090909090909090909090909090"
+                  Signature="48 8b 43 40 48 83 c3 28 48 89 de 48 8b b8 48 0c 00 00 48 8b 07 ff 50 58"
+                  SignatureOffset="0x00"/>
+        </PatchList>
+    </Metadata>
+    <Metadata Title="EA SPORTS™ UFC® 4"
+              Name="Sim Dispatcher 0xc10060 Null-Safety Bypass"
+              Note="Prevents crash in SimThread component dispatcher loop 0xc10060 when handler pointer is NULL"
+              Author="Antigravity UFC4 Port"
+              PatchVer="1.0"
+              AppVer="28.00"
+              AppElf="eboot.bin"
+              isEnabled="true">
+        <PatchList>
+            <Line Type="bytes" Address="0x023b06f0"
+                  Value="488b7b104885ff740bc5fa1045ec488b07ff5020e966f9c5fe"
+                  Signature="54 72 6f 70 68 79 52 75 6e 6e 65 72 00 00 00 00"
+                  SignatureOffset="0x280"/>
+            <Line Type="bytes" Address="0x01010060"
+                  Value="e98b063a0190909090909090909090"
+                  Signature="48 8b 7b 10 c5 fa 10 45 ec 48 8b 07 ff 50 20"
+                  SignatureOffset="0x00"/>
+        </PatchList>
+    </Metadata>
+    <Metadata Title="EA SPORTS™ UFC® 4"
+              Name="Sim Dispatcher 0xc100a0 Null-Safety Bypass"
+              Note="Prevents crash in SimThread component dispatcher loop 0xc100a0 when handler pointer is NULL"
+              Author="Antigravity UFC4 Port"
+              PatchVer="1.0"
+              AppVer="28.00"
+              AppElf="eboot.bin"
+              isEnabled="true">
+        <PatchList>
+            <Line Type="bytes" Address="0x023b0730"
+                  Value="488b7b104885ff740bc5fa1045ec488b07ff5018e966f9c5fe"
+                  Signature="54 72 6f 70 68 79 52 75 6e 6e 65 72 00 00 00 00"
+                  SignatureOffset="0x2c0"/>
+            <Line Type="bytes" Address="0x010100a0"
+                  Value="e98b063a0190909090909090909090"
+                  Signature="48 8b 7b 10 c5 fa 10 45 ec 48 8b 07 ff 50 18"
+                  SignatureOffset="0x00"/>
+        </PatchList>
+    </Metadata>
+    <Metadata Title="EA SPORTS™ UFC® 4"
+              Name="Container Virtual Dispatch 0xffdcf0 Null-Safety Bypass"
+              Note="Prevents crash in container virtual dispatch 0xffdcf0 when object pointer is NULL"
+              Author="Antigravity UFC4 Port"
+              PatchVer="1.0"
+              AppVer="28.00"
+              AppElf="eboot.bin"
+              isEnabled="true">
+        <PatchList>
+            <Line Type="bytes" Address="0x023b0760"
+                  Value="4885ff7412488bb7680700004885ff7406488b07ff6038c3"
+                  Signature="54 72 6f 70 68 79 52 75 6e 6e 65 72 00 00 00 00"
+                  SignatureOffset="0x2f0"/>
+            <Line Type="bytes" Address="0x013fdcf0"
+                  Value="e96b2afb009090909090909090909090"
+                  Signature="48 8b bf 68 07 00 00 48 8b 07 ff 60 38 90 90 90"
+                  SignatureOffset="0x00"/>
+        </PatchList>
+    </Metadata>
+    <Metadata Title="EA SPORTS™ UFC® 4"
+              Name="Fighter Load Dispatch 0xb338e7 Null-Safety Bypass"
+              Note="Prevents crash in fighter load dispatch 0xb338e7 when item pointer is NULL"
+              Author="Antigravity UFC4 Port"
+              PatchVer="1.0"
+              AppVer="28.00"
+              AppElf="eboot.bin"
+              isEnabled="true">
+        <PatchList>
+            <Line Type="bytes" Address="0x023b0780"
+                  Value="4d85f6740a450fb76610e95d31b8feb802000000418945504883c4285b415c415d415e415f5dc3"
+                  Signature="54 72 6f 70 68 79 52 75 6e 6e 65 72 00 00 00 00"
+                  SignatureOffset="0x310"/>
+            <Line Type="bytes" Address="0x00f338e7"
+                  Value="e994ce4701"
+                  Signature="45 0f b7 66 10 4d 8b 7e 08 48 89 45 b8"
+                  SignatureOffset="0x00"/>
+        </PatchList>
+    </Metadata>
+    <Metadata Title="EA SPORTS™ UFC® 4"
+              Name="Fighter Load Dispatch 0xb42f73 Null-Safety Bypass"
+              Note="Prevents crash in fighter load dispatch 0xb42f73 when item pointer is NULL"
+              Author="Antigravity UFC4 Port"
+              PatchVer="1.0"
+              AppVer="28.00"
+              AppElf="eboot.bin"
+              isEnabled="true">
+        <PatchList>
+            <Line Type="bytes" Address="0x023b07b0"
+                  Value="4d85ed740a450fb77d10e9b927b9feb80200000041894424304883c4185b415c415d415e415f5dc3"
+                  Signature="54 72 6f 70 68 79 52 75 6e 6e 65 72 00 00 00 00"
+                  SignatureOffset="0x340"/>
+            <Line Type="bytes" Address="0x00f42f73"
+                  Value="e938d84601"
+                  Signature="45 0f b7 7d 10 4d 8b 75 08 e8 ef a1 4b 00"
+                  SignatureOffset="0x00"/>
+        </PatchList>
+    </Metadata>
+    <Metadata Title="EA SPORTS™ UFC® 4"
+              Name="Fighter Load Dispatch 0xb434f3 Null-Safety Bypass"
+              Note="Prevents crash in fighter load dispatch 0xb434f3 when item pointer is NULL"
+              Author="Antigravity UFC4 Port"
+              PatchVer="1.0"
+              AppVer="28.00"
+              AppElf="eboot.bin"
+              isEnabled="true">
+        <PatchList>
+            <Line Type="bytes" Address="0x023b07e0"
+                  Value="4d85f6740a450fb76610e9092db9feb802000000418945584883c4485b415c415d415e415f5dc3"
+                  Signature="54 72 6f 70 68 79 52 75 6e 6e 65 72 00 00 00 00"
+                  SignatureOffset="0x370"/>
+            <Line Type="bytes" Address="0x00f434f3"
+                  Value="e9e8d24601"
+                  Signature="45 0f b7 66 10 4d 8b 7e 08 e8 6f 9c 4b 00"
+                  SignatureOffset="0x00"/>
+        </PatchList>
+    </Metadata>
+</Patch>
+
+
+
+
