@@ -1,0 +1,26 @@
+// SPDX-FileCopyrightText: Copyright 2025 shadPS4 Emulator Project
+// SPDX-License-Identifier: GPL-2.0-or-later
+
+#pragma once
+
+#include "shader_recompiler/frontend/fetch_shader.h"
+#include "video_core/renderer_vulkan/vk_pipeline_cache.h"
+#include "video_core/renderer_vulkan/vk_shader_util.h"
+
+namespace Vulkan {
+
+void RegisterPipelineData(const ComputePipelineKey& key,
+                          ComputePipeline::SerializationSupport& sdata);
+void RegisterPipelineData(const GraphicsPipelineKey& key, u64 hash,
+                          GraphicsPipeline::SerializationSupport& sdata);
+void RegisterShaderMeta(const Shader::Info& info,
+                        const std::optional<Shader::Gcn::FetchShaderData>& fetch_shader_data,
+                        const Shader::StageSpecialization& spec, size_t perm_hash, size_t perm_idx);
+void RegisterShaderBinary(std::vector<u32>&& spv, u64 pgm_hash, size_t perm_idx);
+/// UFC-88: Intel profile/subgroup bits (0..4), stored in binary version bits 16..20.
+/// Variant zero preserves the existing version; UFC-68's loop guard owns bit 31.
+void SetShaderBinaryVariant(u32 variant);
+/// ufc3 (UFC-89): BbBackport::ShaderBits(), bits 21..23 of the shader binary version.
+void SetShaderBackportBits(u32 bits);
+
+} // namespace Vulkan
