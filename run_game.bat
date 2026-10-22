@@ -21,6 +21,10 @@ set BB_Z16S8_AS_D16=1
 set BB_DRIVER_PIPELINE_CACHE=1
 set BB_PIPELINE_CACHE=1
 
+rem Optional graphics & resolution enhancements:
+rem set BB_NEO=1
+rem set BB_RCAS=1
+
 rem Memory management, write windows & micro-stutter fixes (UFC 3 PERF reference)
 set BB_READBACKS=2
 set BB_READBACK_LINEAR=1
