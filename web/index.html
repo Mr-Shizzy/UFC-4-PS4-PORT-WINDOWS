@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EA SPORTS UFC 4 — Windows Native Launcher</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,600;0,700;0,900;1,400&family=Rajdhani:wght@500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Top Hero Banner with Official Art & Action Bar -->
+    <header class="hero-header">
+      <div class="hero-bg-overlay"></div>
+      <div class="hero-content">
+        <div class="hero-branding">
+          <div class="game-badge-row">
+            <span class="pill pill-gold">PS4 PORT</span>
+            <span class="pill pill-cyan">VULKAN 1.4</span>
+            <span class="pill pill-dark">CUSA14209 · v28.00</span>
+          </div>
+          <h1 class="game-title">EA SPORTS™ <span class="highlight-text">UFC® 4</span></h1>
+          <p class="game-subtitle">Windows Native x86-64 Architecture · Powered by SacredFire</p>
+        </div>
+
+        <div class="hero-hardware-info">
+          <div class="hw-item" id="gpu-info-box">
+            <div class="hw-icon">⚡</div>
+            <div class="hw-details">
+              <span class="hw-label">GRAPHICS PROCESSOR</span>
+              <span class="hw-val" id="gpu-name-display">Detecting GPU...</span>
+            </div>
+          </div>
+          <div class="hw-item" id="controller-info-box">
+            <div class="hw-icon green-pulse" id="pad-icon">🎮</div>
+            <div class="hw-details">
+              <span class="hw-label">CONTROLLER</span>
+              <span class="hw-val" id="pad-status-display">Checking...</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hero Quick Action Bar -->
+      <div class="hero-action-bar">
+        <div class="quick-selectors">
+          <div class="selector-group">
+            <span class="group-title">TARGET FRAMERATE</span>
+            <div class="segment-control" id="fps-segments">
+              <button class="seg-btn" data-fps="30">30</button>
+              <button class="seg-btn active" data-fps="60">60 FPS</button>
+              <button class="seg-btn" data-fps="120">120</button>
+              <button class="seg-btn" data-fps="0">UNCAP</button>
+            </div>
+          </div>
+
+          <div class="selector-group">
+            <span class="group-title">RENDER RESOLUTION</span>
+            <div class="segment-control" id="res-segments">
+              <button class="seg-btn active" data-res="1080p">1080p (Pro)</button>
+              <button class="seg-btn" data-res="900p">900p (PS4)</button>
+              <button class="seg-btn" data-res="1440p">1440p (2K)</button>
+              <button class="seg-btn" data-res="4k">4K</button>
+            </div>
+          </div>
+
+          <div class="selector-group">
+            <span class="group-title">DISPLAY MODE</span>
+            <div class="segment-control" id="display-segments">
+              <button class="seg-btn" data-fullscreen="0">WINDOWED</button>
+              <button class="seg-btn active" data-fullscreen="1">FULLSCREEN</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="main-buttons">
+          <button id="btn-play" class="btn-hero-launch">
+            <div class="btn-glow"></div>
+            <span class="play-icon">▶</span>
+            <span class="play-text" id="play-text">START FIGHT</span>
+          </button>
+          <button id="btn-stop" class="btn-hero-stop" style="display: none;">
+            <span class="stop-icon">■</span>
+            <span class="stop-text">STOP GAME</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Navigation & Dashboard Cards -->
+    <main class="dashboard-body">
+      <nav class="nav-tabs">
+        <button class="nav-tab active" data-tab="tab-game">
+          <span class="tab-icon">🎮</span> General & Controls
+        </button>
+        <button class="nav-tab" data-tab="tab-graphics">
+          <span class="tab-icon">⚡</span> Graphics & Performance
+        </button>
+        <button class="nav-tab" data-tab="tab-enhancements">
+          <span class="tab-icon">🛡️</span> Stability & Patches
+        </button>
+        <button class="nav-tab" data-tab="tab-console">
+          <span class="tab-icon">📜</span> Live Console & Logs
+          <span class="log-indicator" id="log-indicator"></span>
+        </button>
+      </nav>
+
+      <div class="tab-content-area">
+        <!-- TAB 1: General & Controls -->
+        <section id="tab-game" class="tab-pane active">
+          <div class="cards-grid">
+            <div class="card glass-card">
+              <div class="card-header">
+                <h3>🎮 Controller & Input</h3>
+                <span class="card-badge">SDL3 Auto-detected</span>
+              </div>
+              <div class="form-row">
+                <label for="sel-controller">Active Controller</label>
+                <div class="input-with-button">
+                  <select id="sel-controller" class="styled-select">
+                    <option value="">Any connected gamepad (or Keyboard)</option>
+                  </select>
+                  <button id="btn-rescan-pads" class="btn-secondary" title="Rescan USB & Bluetooth Controllers">Rescan</button>
+                </div>
+                <p class="field-hint">Supports DualShock 4 (Bluetooth/USB), DualSense, and Xbox gamepads with haptics.</p>
+              </div>
+              <div class="form-row">
+                <label for="inp-player-name">Fighter Profile Name</label>
+                <input type="text" id="inp-player-name" class="styled-input" value="Player 1" maxlength="16">
+                <p class="field-hint">Name displayed in save data, career mode and in-game HUD.</p>
+              </div>
+              <div class="form-row">
+                <label for="sel-language">Game Language</label>
+                <select id="sel-language" class="styled-select">
+                  <option value="1">English (US)</option>
+                  <option value="2">French</option>
+                  <option value="4">German</option>
+                  <option value="5">Italian</option>
+                  <option value="3">Spanish (Spain)</option>
+                  <option value="20">Spanish (Latin America)</option>
+                  <option value="17">Portuguese (Brazil)</option>
+                  <option value="16">Polish</option>
+                  <option value="8">Russian</option>
+                  <option value="0">Japanese</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="card glass-card">
+              <div class="card-header">
+                <h3>📁 Game Installation Directory</h3>
+                <span class="card-badge badge-green">Ready</span>
+              </div>
+              <div class="form-row">
+                <label for="inp-game-path">Merged Game Dump Location</label>
+                <input type="text" id="inp-game-path" class="styled-input" readonly>
+                <p class="field-hint">Contains UFC 4 base game files and update 28.00 linked cleanly.</p>
+              </div>
+              <div class="info-callout">
+                <span class="callout-icon">💡</span>
+                <div class="callout-text">
+                  <strong>In-Game Controls Cheatsheet:</strong>
+                  Press <kbd>L3</kbd> + <kbd>R3</kbd> or <kbd>Insert</kbd> to toggle the in-game port overlay for FPS counter, split-screen and bindings.
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- TAB 2: Graphics & Performance -->
+        <section id="tab-graphics" class="tab-pane">
+          <div class="cards-grid">
+            <div class="card glass-card">
+              <div class="card-header">
+                <h3>⚡ Presentation & Synchronization</h3>
+                <span class="card-badge">Zero Judder</span>
+              </div>
+              <div class="form-row">
+                <label for="sel-present-mode">Presentation / Swapchain Mode</label>
+                <select id="sel-present-mode" class="styled-select">
+                  <option value="Mailbox" selected>Mailbox (Ultra-low latency, recommended)</option>
+                  <option value="Fifo">FIFO (Standard VSync 60Hz)</option>
+                  <option value="Immediate">Immediate (Uncapped presentation, may tear)</option>
+                </select>
+                <p class="field-hint">Mailbox provides tear-free rendering with immediate frame push.</p>
+              </div>
+              <div class="form-row">
+                <label for="sel-sharpness">AMD FidelityFX RCAS Sharpness</label>
+                <select id="sel-sharpness" class="styled-select">
+                  <option value="0">Off (Default TAA)</option>
+                  <option value="1">Low Sharpening</option>
+                  <option value="2" selected>Medium (Optimal clarity)</option>
+                  <option value="3">High Sharpening</option>
+                </select>
+                <p class="field-hint">Eliminates temporal anti-aliasing blur on fighters, gloves, and octagon canvas.</p>
+              </div>
+              <div class="form-row">
+                <label for="sel-upscaler">Spatial Resolution Upscaling</label>
+                <select id="sel-upscaler" class="styled-select">
+                  <option value="0" selected>Off (Native frame)</option>
+                  <option value="1">AMD FSR 1.0 (FidelityFX Super Resolution)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="card glass-card">
+              <div class="card-header">
+                <h3>🧠 Memory & Write-Tracking (UFC-48 / UFC-49)</h3>
+                <span class="card-badge badge-green">Enabled</span>
+              </div>
+              <div class="toggle-list">
+                <label class="toggle-item">
+                  <input type="checkbox" id="chk-write-windows" checked>
+                  <div class="toggle-content">
+                    <span class="toggle-title">Memory Write Windows (BB_WRITE_WINDOW=1)</span>
+                    <span class="toggle-desc">Eliminates thousands of page fault stalls when CPU updates hit reactions & blood.</span>
+                  </div>
+                </label>
+                <label class="toggle-item">
+                  <input type="checkbox" id="chk-preupload" checked>
+                  <div class="toggle-content">
+                    <span class="toggle-title">Pre-upload Dirty Pages (BB_PREUPLOAD=1)</span>
+                    <span class="toggle-desc">Ensures fluid hit animations, sweat splashes and skin deformation.</span>
+                  </div>
+                </label>
+                <label class="toggle-item">
+                  <input type="checkbox" id="chk-precise-readbacks" checked>
+                  <div class="toggle-content">
+                    <span class="toggle-title">Precise Linear Readbacks (BB_READBACKS=2)</span>
+                    <span class="toggle-desc">Renders fighter face models, shorts and tattoos without black textures.</span>
+                  </div>
+                </label>
+                <label class="toggle-item">
+                  <input type="checkbox" id="chk-pipeline-cache" checked>
+                  <div class="toggle-content">
+                    <span class="toggle-title">Driver Pipeline Cache (BB_DRIVER_PIPELINE_CACHE=1)</span>
+                    <span class="toggle-desc">Saves Vulkan pipelines to disk to eliminate recurring shader compile hitches.</span>
+                  </div>
+                </label>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- TAB 3: Stability & Patches -->
+        <section id="tab-enhancements" class="tab-pane">
+          <div class="cards-grid">
+            <div class="card glass-card">
+              <div class="card-header">
+                <h3>🛡️ Applied UFC 4 Dual-Baked Patches</h3>
+                <span class="card-badge badge-green">46 Active Patches</span>
+              </div>
+              <div class="patches-summary-box">
+                <div class="patch-metric">
+                  <span class="metric-num">46</span>
+                  <span class="metric-label">XML Patches</span>
+                </div>
+                <div class="patch-metric">
+                  <span class="metric-num">59</span>
+                  <span class="metric-label">Binary Writes</span>
+                </div>
+                <div class="patch-metric">
+                  <span class="metric-num">100%</span>
+                  <span class="metric-label">Dual-Baked Sync</span>
+                </div>
+              </div>
+              <ul class="patch-highlights-list">
+                <li><span class="bullet-check">✓</span> <strong>EA DirtySDK Telemetry & HTTP:</strong> Clean offline fallback bypass</li>
+                <li><span class="bullet-check">✓</span> <strong>Container & Node Iterators:</strong> Null-safety trampolines (0x38b440–0x18b0590)</li>
+                <li><span class="bullet-check">✓</span> <strong>Fighter Corner Dispatch:</strong> Blue/Red corner component dispatch null-safety (0xb338e7, 0xb42f73, 0xb434f3)</li>
+                <li><span class="bullet-check">✓</span> <strong>Simulation Dispatchers:</strong> Animation component null dispatch protection</li>
+              </ul>
+            </div>
+
+            <div class="card glass-card">
+              <div class="card-header">
+                <h3>⚡ Quality of Life Enhancements</h3>
+              </div>
+              <div class="toggle-list">
+                <label class="toggle-item">
+                  <input type="checkbox" id="chk-skip-movies" checked>
+                  <div class="toggle-content">
+                    <span class="toggle-title">Skip Intro Videos (Instant Boot)</span>
+                    <span class="toggle-desc">Skips long EA Sports and UFC intro trailers directly into main menu.</span>
+                  </div>
+                </label>
+                <label class="toggle-item">
+                  <input type="checkbox" id="chk-neo-mode">
+                  <div class="toggle-content">
+                    <span class="toggle-title">PS4 Pro Mode (BB_NEO=1)</span>
+                    <span class="toggle-desc">Enables PS4 Pro 7-CPU core mode, 5.5GB direct VRAM, and 1080p resolution target.</span>
+                  </div>
+                </label>
+                <label class="toggle-item">
+                  <input type="checkbox" id="chk-show-fps" checked>
+                  <div class="toggle-content">
+                    <span class="toggle-title">In-Game FPS Counter</span>
+                    <span class="toggle-desc">Displays a subtle real-time framerate counter in the screen corner.</span>
+                  </div>
+                </label>
+              </div>
+              <div class="card-actions-row">
+                <button id="btn-clear-cache" class="btn-secondary">Clear Shader Cache</button>
+                <button id="btn-rebuild-patches" class="btn-secondary">Rebuild Patches Binary</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- TAB 4: Live Console & Logs -->
+        <section id="tab-console" class="tab-pane">
+          <div class="card glass-card full-height-card">
+            <div class="card-header console-header">
+              <div class="console-title-group">
+                <h3>📜 Live Diagnostics Console</h3>
+                <span class="console-status-pill" id="console-status">Status: Idle</span>
+              </div>
+              <div class="console-actions">
+                <button id="btn-copy-log" class="btn-icon-text">📋 Copy Log</button>
+                <button id="btn-clear-log" class="btn-icon-text">🧹 Clear Screen</button>
+                <button id="btn-open-log-dir" class="btn-icon-text">📂 Open Logs Folder</button>
+              </div>
+            </div>
+            <div class="terminal-wrapper">
+              <pre id="terminal-output" class="terminal-body"><span class="log-info">[UFC4 Launcher] Ready. Select settings and click START FIGHT.</span></pre>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <!-- App Footer -->
+    <footer class="app-footer">
+      <div class="footer-left">
+        <span class="footer-brand">EA SPORTS UFC® 4 — PC Native Port</span>
+        <span class="footer-meta">NVIDIA RTX 4060 · Vulkan 1.4 · 60 FPS Locked</span>
+      </div>
+      <div class="footer-right">
+        <span id="session-status" class="session-status">Idle</span>
+      </div>
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
