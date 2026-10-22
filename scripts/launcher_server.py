@@ -29,8 +29,26 @@ class LauncherState:
         self.game_process = None
         self.log_subscribers = []
         self.subscribers_lock = threading.Lock()
-        self.gpu_name = self.detect_gpu()
-        self.gamepads = self.detect_gamepads()
+        self._gpu_name = None
+        self._gamepads = None
+        # Start hardware detection in background so server binds immediately
+        threading.Thread(target=self._init_hardware, daemon=True).start()
+
+    def _init_hardware(self):
+        self._gpu_name = self.detect_gpu()
+        self._gamepads = self.detect_gamepads()
+
+    @property
+    def gpu_name(self):
+        if self._gpu_name is None:
+            return self.detect_gpu()
+        return self._gpu_name
+
+    @property
+    def gamepads(self):
+        if self._gamepads is None:
+            return self.detect_gamepads()
+        return self._gamepads
 
     def detect_gpu(self):
         caps_exe = os.path.join(ROOT_DIR, "bin", "bb-gpu-capabilities.exe")
@@ -351,16 +369,24 @@ class LauncherHandler(SimpleHTTPRequestHandler):
             return str(e)
 
 def run_server():
-    server = ThreadingHTTPServer(("127.0.0.1", 0), LauncherHandler)
-    port = server.server_address[1]
+    port = 44209
+    try:
+        server = ThreadingHTTPServer(("127.0.0.1", port), LauncherHandler)
+    except OSError:
+        server = ThreadingHTTPServer(("127.0.0.1", 0), LauncherHandler)
+        port = server.server_address[1]
+
     port_file = os.path.join(USER_DIR, "launcher_port.txt")
     with open(port_file, "w") as f:
         f.write(str(port))
-    print(f"UFC 4 Launcher server active at http://127.0.0.1:{port}")
+    print(f"UFC 4 Launcher server active at http://127.0.0.1:{port}", flush=True)
     try:
         server.serve_forever()
-    except KeyboardInterrupt:
+    except (KeyboardInterrupt, SystemExit):
         pass
+    finally:
+        if STATE.game_process and STATE.game_process.poll() is None:
+            STATE.game_process.terminate()
 
 if __name__ == "__main__":
     run_server()
