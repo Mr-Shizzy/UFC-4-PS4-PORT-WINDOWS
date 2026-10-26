@@ -5,6 +5,7 @@ for the modern UFC 4 desktop application.
 import os
 import sys
 import json
+import hashlib
 import queue
 import threading
 import subprocess
@@ -105,6 +106,50 @@ def browse_folder():
         print("Browse error:", e)
     return None
 
+
+def run_script(name, *args):
+    """Runs scripts/<name> with the launcher's Python; returns (exit code, stdout, stdout and stderr)."""
+    res = subprocess.run([sys.executable, os.path.join(ROOT_DIR, "scripts", name), *args],
+                         cwd=ROOT_DIR, capture_output=True, text=True, encoding="utf-8", errors="replace")
+    return res.returncode, res.stdout.strip(), (res.stdout + res.stderr).strip()
+
+
+def prepare_game(game):
+    """The folder to play, or (None, error) when the game cannot start.
+
+    What the native launcher does before a launch: a base game with its update beside it
+    (CUSA14209 + CUSA14209-patch) is merged by merge_update.py, game_check.py names a wrong
+    dump, and out/boot-linked.bin, which the release does not ship because it is built from
+    the user's eboot.bin, is built by prepare.py and link_modules.py when it is missing or was
+    built from another eboot.bin (out/analysis.json keeps its hash)."""
+    if not os.path.isfile(os.path.join(game, "eboot.bin")):
+        return None, (f'No eboot.bin in "{game}": choose the game folder '
+                      "(CUSA14209, with CUSA14209-patch beside it or merged in).")
+    code, folder, output = run_script("merge_update.py", game)
+    if code:
+        return None, "Merging the 28.00 update into the game folder failed:\n" + output
+    if folder:
+        game = folder.splitlines()[-1].strip()
+    code, _, output = run_script("game_check.py", game)
+    if code:
+        return None, output
+    with open(os.path.join(game, "eboot.bin"), "rb") as f:
+        eboot_hash = hashlib.sha256(f.read()).hexdigest()
+    try:
+        with open(os.path.join(ROOT_DIR, "out", "analysis.json"), encoding="utf-8") as f:
+            built_from = json.load(f).get("source_sha256")
+    except (OSError, ValueError):
+        built_from = None
+    if not os.path.isfile(os.path.join(ROOT_DIR, "out", "boot-linked.bin")) or built_from != eboot_hash:
+        STATE.broadcast_log("First launch with this game folder: preparing eboot.bin (prepare.py, link_modules.py)...\n")
+        for name in ("prepare.py", "link_modules.py"):
+            code, _, output = run_script(name, game)
+            STATE.broadcast_log(output + "\n")
+            if code:
+                return None, f"{name} failed:\n{output}"
+    return game, None
+
+
 class LauncherHandler(SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, directory=WEB_DIR, **kwargs)
@@ -157,7 +202,8 @@ class LauncherHandler(SimpleHTTPRequestHandler):
 
         elif path.startswith("/assets/"):
             filename = os.path.basename(path)
-            asset_path = os.path.join(DEFAULT_GAME_PATH, "sce_sys", filename)
+            game = self.load_settings().get("game_path") or DEFAULT_GAME_PATH
+            asset_path = os.path.join(game, "sce_sys", filename)
             if os.path.exists(asset_path):
                 self.send_response(200)
                 if filename.endswith(".png"):
@@ -377,7 +423,9 @@ class LauncherHandler(SimpleHTTPRequestHandler):
         import_names = os.path.join(ROOT_DIR, "out", "import_names.txt")
         content_bin = os.path.join(ROOT_DIR, "out", "content.bin")
         patches_bin = os.path.join(ROOT_DIR, "out", "patches.bin")
-        app0_dir = os.path.abspath(settings.get("game_path") or DEFAULT_GAME_PATH)
+        app0_dir, error = prepare_game(os.path.abspath(settings.get("game_path") or DEFAULT_GAME_PATH))
+        if error:
+            return error
 
         cmd = [
             game_bin,
